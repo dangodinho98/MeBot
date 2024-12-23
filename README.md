@@ -24,7 +24,7 @@ MeBot is a personalized chatbot that answers questions about your experiences ba
 
 1. Clone the repository:
     ```bash
-    git clone https://github.com/your-repo/mebot.git
+    git clone https://github.com/dangodinho98/mebot.git
     cd mebot
     ```
 
@@ -34,9 +34,17 @@ MeBot is a personalized chatbot that answers questions about your experiences ba
     dotnet add package UglyToad.PdfPig
     ```
 
-3. Update the following constants in `Program.cs`:
-    - `Phi3ApiKey`: Add your Phi-3 API key.
-    - `PdfFilePath`: Set the path to your resume PDF.
+
+3. Configure `appsettings.json`:
+    ```json
+    {
+      "Phi3ApiSettings": {
+        "ApiKey": "your-phi3-api-key",
+        "ApiUrl": "https://api.anthropic.com/v1/completions"
+      },
+      "PdfFilePath": "path_to_your_resume.pdf"
+    }
+    ```
 
 ---
 
