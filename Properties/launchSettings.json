@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "MeBot": {
+      "commandName": "Project"
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker"
+    }
+  }
+}
