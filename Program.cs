@@ -7,7 +7,14 @@ using System.Text;
 
 internal class Program
 {
-    private const string ApiKey = "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";
+    private static string ApiKey
+    {
+        get
+        {
+            var secrets = JsonConvert.DeserializeObject<dynamic>(File.ReadAllText("secrets.json"));
+            return secrets?.HuggingFaceApiKey ?? throw new Exception("API key not found in secrets.json.");
+        }
+    }
 
     private static async Task Main(string[] args)
     {
@@ -60,7 +67,7 @@ internal class Program
         var jsonPayload = JsonConvert.SerializeObject(payload);
         var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
 
-        HttpResponseMessage response = await httpClient.PostAsync("https://api-inference.huggingface.co/models/deepset/roberta-base-squad2", content);
+        var response = await httpClient.PostAsync("https://api-inference.huggingface.co/models/deepset/roberta-base-squad2", content);
         var responseString = await response.Content.ReadAsStringAsync();
 
         var result = JsonConvert.DeserializeObject<HuggingFaceResponse>(responseString);
