@@ -1,4 +1,6 @@
-﻿namespace MeBot;
+﻿using MeBot.Response;
+
+namespace MeBot;
 
 using Newtonsoft.Json;
 using System.Text;
@@ -13,6 +15,11 @@ internal class Program
         Console.BackgroundColor = ConsoleColor.Black;
 
         var context = await File.ReadAllTextAsync("context.json");
+        if (context == null)
+        {
+            Console.WriteLine("Error: Context file could not be read.");
+            return;
+        }
 
         Console.WriteLine("Welcome to the 'Me' Bot! Ask me anything about my experiences, and I'll answer as if I were you.");
         Console.WriteLine("Type '/bye' to end the conversation.\n");
@@ -20,6 +27,9 @@ internal class Program
         while (true)
         {
             Console.WriteLine("Please ask me a question!\n");
+
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write("> ");
 
             var question = Console.ReadLine();
             if (string.IsNullOrWhiteSpace(question))
@@ -53,8 +63,9 @@ internal class Program
         HttpResponseMessage response = await httpClient.PostAsync("https://api-inference.huggingface.co/models/deepset/roberta-base-squad2", content);
         var responseString = await response.Content.ReadAsStringAsync();
 
-        dynamic result = JsonConvert.DeserializeObject(responseString);
-        return result?.answer ?? "Sorry, I couldn't answer that.";
+        var result = JsonConvert.DeserializeObject<HuggingFaceResponse>(responseString);
+        return result?.Choices?.FirstOrDefault()?.Text ?? "Sorry, I couldn't answer that.";
+
     }
 
     private static void BotReply(string message)
