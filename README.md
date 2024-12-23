@@ -67,7 +67,7 @@ MeBot is a personalized chatbot that answers questions about your experiences ba
     
 5. Run Locally with Command-Line Arguments:
     ```bash
-    dotnet run -- Phi3ApiKey=your-api-key PdfFilePath=path_to_your_resume.pdf
+    dotnet run -- Phi3ApiKey=your-api-key
     ```
 
 ---
