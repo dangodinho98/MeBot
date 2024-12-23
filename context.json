@@ -1,0 +1,140 @@
+{
+  "name": "Daniel Godinho Soares",
+  "location": "Belo Horizonte, Brazil",
+  "contact": {
+    "phone": "+55 31 9 9252-1539",
+    "email": "dangodinho98@gmail.com",
+    "linkedin": "linkedin.com/in/danielgodinhosoares",
+    "github": "github.com/dangodinho98"
+  },
+  "objective": "Software Architect .NET, Senior Systems Analyst .NET",
+  "professional_summary": "Results-driven .NET Developer with 10 years of experience in designing, developing, and delivering robust, scalable, and efficient software solutions across logistics, finance, insurance, and outsourcing.",
+  "skills": {
+    "languages": [ "C#", "JavaScript", "TypeScript", "SQL" ],
+    "frameworks_and_libraries": [
+      "ASP.NET Core",
+      ".NET Framework",
+      "Web API",
+      "WPF",
+      "Windows Forms",
+      "Blazor",
+      "Entity Framework",
+      "Dapper",
+      "LINQ",
+      "SignalR",
+      "Node.js",
+      "xUnit",
+      "NUnit"
+    ],
+    "cloud_platforms": [ "Microsoft Azure", "AWS" ],
+    "databases": [ "SQL Server", "PostgreSQL", "Oracle", "MySQL", "MongoDB", "Redis", "ElasticSearch" ],
+    "architectural_patterns": [
+      "SOLID Principles",
+      "Microservices",
+      "RESTful API Design",
+      "TDD",
+      "DDD",
+      "BDD",
+      "Clean Architecture",
+      "Agile"
+    ],
+    "devops_tools": [ "Docker", "Kubernetes", "Jenkins", "GitHub Actions", "Azure DevOps", "ArgoCD" ],
+    "front_end": [ "Node.js", "Angular", "React", "Bootstrap", "DevExpress", "Razor Pages", "jQuery" ],
+    "testing_tools": [ "Unit Testing", "Integration Testing", "Postman", "Fiddler" ],
+    "version_control": [ "Git", "GitHub", "GitLab", "Bitbucket" ],
+    "collaboration_tools": [ "Jira", "Trello", "Slack" ]
+  },
+  "certifications": [
+    "Microsoft Certified: Azure Fundamentals",
+    "AWS Certified Cloud Practitioner",
+    "Scrum Foundation Professional Certificate - SFPC™ (Certiprof)"
+  ],
+  "work_experience": [
+    {
+      "role": "Software Engineer",
+      "company": "BairesDev, USA",
+      "duration": "2022 – Present",
+      "responsibilities": [
+        "Designed and maintained scalable .NET Core and Node.js applications.",
+        "Developed secure RESTful APIs using OAuth2 and JWT.",
+        "Integrated cloud services like Azure Blob Storage and Service Bus.",
+        "Led a team in Agile methodologies."
+      ],
+      "technologies": [ "C#", "Azure", "Docker", "Redis", "Angular", "TypeScript", "Node.js" ]
+    },
+    {
+      "role": "Senior .NET Developer",
+      "company": "F1 Solutions, Australia",
+      "duration": "2021 – 2022",
+      "responsibilities": [
+        "Migrated legacy systems to modern technologies.",
+        "Designed and developed microservices using .NET Core.",
+        "Integrated React with API-driven back-end services."
+      ],
+      "technologies": [ ".NET Core", "PostgreSQL", "React", "REST APIs" ]
+    },
+    {
+      "role": ".NET Developer Analyst",
+      "company": "Squadra Technology, Brazil",
+      "duration": "2020 – 2021",
+      "responsibilities": [
+        "Developed cloud-native applications using Azure services.",
+        "Designed microservices architecture.",
+        "Implemented CI/CD pipelines."
+      ],
+      "technologies": [ "Azure", "Salesforce", "SAP", "SQL Server", "Microservices" ]
+    },
+    {
+      "role": ".NET Developer",
+      "company": "Reply, Brazil",
+      "duration": "2018 – 2020",
+      "responsibilities": [
+        "Designed SOA-based solutions using Web API and WCF.",
+        "Optimized database performance for Oracle and SQL Server.",
+        "Deployed applications on IIS and Azure App Services."
+      ],
+      "technologies": [ "ASP.NET", "WCF", "SQL Server", "Azure App Services" ]
+    },
+    {
+      "role": "Junior .NET Developer",
+      "company": "SIAT Informatica LTDA, Brazil",
+      "duration": "2015 – 2018",
+      "responsibilities": [
+        "Created logistics systems with WPF and ASP.NET MVC.",
+        "Maintained SQL Server databases integrated with Windows Services."
+      ],
+      "technologies": [ "WPF", "ASP.NET MVC", "SQL Server" ]
+    }
+  ],
+  "education": [
+    {
+      "degree": "Postgraduate Diploma in Software Architecture",
+      "institution": "IGTI",
+      "year": "2022 – 2023"
+    },
+    {
+      "degree": "Bachelor’s Degree in Information Systems",
+      "institution": "Faculdade FUMEC",
+      "year": "2017 – 2021"
+    },
+    {
+      "degree": "Technical Certificate in IT",
+      "institution": "COTEMIG",
+      "year": "2014 – 2016"
+    }
+  ],
+  "languages": [
+    {
+      "language": "Portuguese",
+      "proficiency": "Native"
+    },
+    {
+      "language": "English",
+      "proficiency": "Advanced"
+    },
+    {
+      "language": "Spanish",
+      "proficiency": "Beginner"
+    }
+  ]
+}

@@ -1,73 +1,66 @@
-﻿using MeBot.Helpers;
+﻿namespace MeBot;
+
 using Newtonsoft.Json;
 using System.Text;
 
-namespace MeBot
+internal class Program
 {
-    internal class Program
+    private const string ApiKey = "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";
+
+    private static async Task Main(string[] args)
     {
-        private const string PdfFilePath = "Resume Daniel Soares.pdf";
+        Console.ForegroundColor = ConsoleColor.Cyan;
+        Console.BackgroundColor = ConsoleColor.Black;
 
-        private static async Task Main(string[] args)
+        var context = await File.ReadAllTextAsync("context.json");
+
+        Console.WriteLine("Welcome to the 'Me' Bot! Ask me anything about my experiences, and I'll answer as if I were you.");
+        Console.WriteLine("Type '/bye' to end the conversation.\n");
+
+        while (true)
         {
-            string apiKey = args.FirstOrDefault(arg => arg.StartsWith("Phi3ApiKey="))?.Split('=')[1];
-            if (string.IsNullOrEmpty(apiKey))
+            Console.WriteLine("Please ask me a question!\n");
+
+            var question = Console.ReadLine();
+            if (string.IsNullOrWhiteSpace(question))
             {
-                Console.WriteLine("Environment variables 'Phi3ApiKey' is not set.");
-                return;
+                continue;
             }
 
-            var resumeText = PdfTextExtractor.ExtractTextFromPdf(PdfFilePath);
-            if (string.IsNullOrEmpty(resumeText))
+            if (question.ToLower() == "/bye")
             {
-                Console.WriteLine("Error extracting text from PDF.");
-                return;
+                break;
             }
 
-            Console.WriteLine("Welcome to the 'Me' Bot! Ask me anything about my experiences, and I'll answer as if I were you.");
-            Console.WriteLine("Type '/bye' to end the conversation.\n");
-
-            while (true)
-            {
-                Console.Write("Please ask me a question!");
-
-                var question = Console.ReadLine();
-                if (string.IsNullOrWhiteSpace(question))
-                {
-                    continue;
-                }
-
-                if (question.ToLower() == "/bye")
-                {
-                    break;
-                }
-
-                var answer = await GetAnswerFromModelAsync(apiKey, question, resumeText);
-                Console.WriteLine($"Daniel's answer: {answer}\n");
-            }
+            var answer = await GetAnswerFromModelAsync(question, context);
+            BotReply($"Daniel's answer: {answer}\n");
         }
+    }
 
-        public static async Task<string> GetAnswerFromModelAsync(string apiKey, string question, string context)
+    private static async Task<string> GetAnswerFromModelAsync(string question, string context)
+    {
+        using var httpClient = new HttpClient();
+        httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {ApiKey}");
+
+        var payload = new
         {
-            using var client = new HttpClient();
+            inputs = new { question, context }
+        };
 
-            var requestData = new
-            {
-                model = "phi-3",  // Hypothetical model name for Phi-3
-                prompt = $"{context}\nQuestion: {question}",
-                temperature = 0.7,
-                max_tokens = 150
-            };
+        var jsonPayload = JsonConvert.SerializeObject(payload);
+        var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
 
-            client.DefaultRequestHeaders.Add("Authorization", $"Bearer {apiKey}");
+        HttpResponseMessage response = await httpClient.PostAsync("https://api-inference.huggingface.co/models/deepset/roberta-base-squad2", content);
+        var responseString = await response.Content.ReadAsStringAsync();
 
-            var content = new StringContent(JsonConvert.SerializeObject(requestData), Encoding.UTF8, "application/json");
-            var response = await client.PostAsync("https://api.anthropic.com/v1/completions", content);
+        dynamic result = JsonConvert.DeserializeObject(responseString);
+        return result?.answer ?? "Sorry, I couldn't answer that.";
+    }
 
-            var responseString = await response.Content.ReadAsStringAsync();
-            dynamic jsonResponse = JsonConvert.DeserializeObject(responseString);
-
-            return jsonResponse?.choices?[0]?.text?.ToString() ?? "No response from API.";
-        }
+    private static void BotReply(string message)
+    {
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        Console.WriteLine(message);
+        Console.ResetColor();
     }
 }
