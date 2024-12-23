@@ -34,16 +34,41 @@ MeBot is a personalized chatbot that answers questions about your experiences ba
     dotnet add package UglyToad.PdfPig
     ```
 
+3. Build the Docker image:
+    ```dockerfile
+    # See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
-3. Configure `appsettings.json`:
-    ```json
-    {
-      "Phi3ApiSettings": {
-        "ApiKey": "your-phi3-api-key",
-        "ApiUrl": "https://api.anthropic.com/v1/completions"
-      },
-      "PdfFilePath": "path_to_your_resume.pdf"
-    }
+    # This stage is used when running from VS in fast mode (Default for Debug configuration)
+    FROM mcr.microsoft.com/dotnet/runtime:9.0 AS base
+    USER $APP_UID
+    WORKDIR /app
+
+    # This stage is used to build the service project
+    FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+    ARG BUILD_CONFIGURATION=Release
+    WORKDIR /src
+    COPY ["MeBot.csproj", "."]
+    RUN dotnet restore "./MeBot.csproj"
+    COPY . .
+    WORKDIR "/src/."
+    RUN dotnet build "./MeBot.csproj" -c $BUILD_CONFIGURATION -o /app/build
+
+    # This stage is used to publish the service project to be copied to the final stage
+    FROM build AS publish
+    ARG BUILD_CONFIGURATION=Release
+    RUN dotnet publish "./MeBot.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+
+    # This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
+    FROM base AS final
+    WORKDIR /app
+    COPY --from=publish /app/publish .
+    ENTRYPOINT ["dotnet", "MeBot.dll"]
+    ```
+
+4. Run the Docker container:
+    ```bash
+    docker build -t mebot .
+    docker run -e Phi3ApiKey=your-phi3-api-key -e PdfFilePath=path_to_your_resume.pdf mebot
     ```
 
 ---
