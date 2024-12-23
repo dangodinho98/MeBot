@@ -1,12 +1,15 @@
-# MeBot: A Chatbot That Knows You
+# MeBot: Personal AI Chatbot
 
-MeBot is a personalized chatbot that answers questions about your experiences based on your resume. It uses text extracted from a PDF file of your resume as its context and communicates with a hypothetical AI model named Phi-3 for generating responses.
+**MeBot** is a personalized chatbot designed to answer questions about your professional experiences using context provided in a structured JSON file. The bot uses the Hugging Face Inference API to generate responses and provides an engaging console interface.
+
+---
 
 ## Features
-- Extracts text from your resume (PDF format) using the PdfPig library.
-- Integrates with a hypothetical AI model (Phi-3) for natural language understanding and response generation.
-- Enables interactive conversations about your professional experiences.
-- Allows users to terminate the conversation gracefully by typing `/bye`.
+
+- **Custom Context**: Uses a JSON file (`context.json`) to provide information about your experiences.
+- **Hugging Face Integration**: Leverages Hugging Face’s inference models for natural language processing.
+- **Interactive Console**: Color-coded output for a better user experience.
+- **Customizable and Expandable**: Easily adapt the bot for other contexts or functionalities.
 
 ---
 
@@ -15,113 +18,104 @@ MeBot is a personalized chatbot that answers questions about your experiences ba
 - **.NET SDK**: Version 6.0 or higher.
 - **NuGet Packages**:
   - [Newtonsoft.Json](https://www.nuget.org/packages/Newtonsoft.Json): For JSON serialization and deserialization.
-  - [UglyToad.PdfPig](https://www.nuget.org/packages/UglyToad.PdfPig): For extracting text from PDFs.
-- **Phi-3 API Key**: Replace `your-phi3-api-key` in the code with your actual API key.
+- **Hugging Face API Key**: Obtain from [Hugging Face](https://huggingface.co/) and add it to the `ApiKey` constant in the code.
+- **Context File**: Prepare a JSON file named `context.json` with your professional details.
 
 ---
 
 ## Installation
 
-1. Clone the repository:
+1. **Clone the Repository**:
     ```bash
     git clone https://github.com/dangodinho98/mebot.git
     cd mebot
     ```
 
-2. Install the required NuGet packages:
+2. **Install Dependencies**:
+    Ensure the required NuGet packages are installed:
     ```bash
     dotnet add package Newtonsoft.Json
-    dotnet add package UglyToad.PdfPig
     ```
 
-3. Build the Docker image:
-    ```dockerfile
-    FROM mcr.microsoft.com/dotnet/runtime:9.0 AS base
-    USER $APP_UID
-    WORKDIR /app
-
-    FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
-    ARG BUILD_CONFIGURATION=Release
-    WORKDIR /src
-    COPY ["MeBot.csproj", "."]
-    RUN dotnet restore "./MeBot.csproj"
-    COPY . .
-    WORKDIR "/src/."
-    RUN dotnet build "./MeBot.csproj" -c $BUILD_CONFIGURATION -o /app/build
-
-    FROM build AS publish
-    ARG BUILD_CONFIGURATION=Release
-    RUN dotnet publish "./MeBot.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
-
-    FROM base AS final
-    WORKDIR /app
-    COPY --from=publish /app/publish .
-    ENTRYPOINT ["dotnet", "MeBot.dll"]
+3. **Prepare Context**:
+    Create a `context.json` file with the following structure:
+    ```json
+    {
+        "summary": "Your professional summary",
+        "skills": ["Skill1", "Skill2"],
+        "experiences": [
+            {
+                "role": "Your Role",
+                "company": "Your Company",
+                "description": "What you did"
+            }
+        ]
+    }
     ```
 
-4. Run the Docker container:
+4. **Set Up Hugging Face API Key**:
+    Replace the `ApiKey` constant in the `Program.cs` file with your Hugging Face API key.
+
+5. **Run the Application**:
     ```bash
-    docker build -t mebot .
-    docker run mebot
-    ```
-    
-5. Run Locally with Command-Line Arguments:
-    ```bash
-    dotnet run -- Phi3ApiKey=your-api-key
+    dotnet run
     ```
 
 ---
 
 ## Usage
 
-1. Build and run the application:
-    ```bash
-    dotnet run
-    ```
+1. **Start the Bot**:
+    When you run the application, the bot welcomes you and prompts for questions.
 
-2. Follow the prompts in the console:
-    - Type a question about your experiences.
-    - Type `/bye` to exit the conversation.
+2. **Ask Questions**:
+    Type questions related to the provided context, and the bot will respond using the Hugging Face model.
 
-3. Example conversation:
-    ```plaintext
-    Welcome to the 'Me' Bot! Ask me anything about my experiences, and I'll answer as if I were you.
-    Type '/bye' to end the conversation.
+3. **Exit the Conversation**:
+    Type `/bye` to end the session.
 
-    Please ask me a question!
-    > What are your key technical skills?
-    Daniel's answer: My technical skills include .NET development, C#, and building scalable applications.
+---
 
-    Please ask me a question!
-    > /bye
-    Goodbye!
-    ```
+## Example Conversation
+
+![image](https://github.com/user-attachments/assets/c80211ab-d487-405e-b23b-e66c925b6733)
 
 ---
 
 ## Code Overview
 
 ### `Program.cs`
-- Entry point of the application.
-- Handles user input and integrates with the Phi-3 API for response generation.
+- **Main Entry Point**: Handles user input and manages the conversation flow.
+- **API Integration**: Sends questions and context to the Hugging Face API and processes the responses.
+- **Utilities**:
+  - `GetAnswerFromModelAsync`: Communicates with the Hugging Face API.
+  - `BotReply`: Outputs responses in a distinct color.
 
-### `Helpers/PdfTextExtractor.cs`
-- Extracts text from PDF files using the **PdfPig** library.
-- Returns extracted text as a string.
+### JSON Context File (`context.json`)
+- Stores user-provided context information for the bot.
+- Easily customizable to include various details about professional experiences, skills, and more.
 
-### Phi-3 API Integration
-- Sends user queries and the extracted resume text to the Phi-3 API.
-- Receives and displays responses generated by the AI model.
+---
+
+## Future Enhancements
+
+- **Multi-Language Support**: Expand to support languages other than English.
+- **Additional Context Formats**: Allow importing context from other file formats (e.g., XML, YAML).
+- **GUI Interface**: Add a graphical user interface for a more interactive experience.
 
 ---
 
 ## Limitations
 
-1. **PDF Text Extraction**:
-   - Works only with PDFs containing selectable text. For scanned/image-based PDFs, consider integrating OCR (e.g., Tesseract).
-
-2. **Phi-3 Model**:
-   - This implementation assumes a hypothetical AI API. Replace with a real AI model or service as needed.
+- **API Dependency**: Requires internet access and a valid Hugging Face API key.
+- **Context Scope**: Limited by the information provided in the `context.json` file.
 
 ---
+
+## License
+This project is licensed under the MIT License.
+
+---
+
+Enjoy using MeBot!
 
