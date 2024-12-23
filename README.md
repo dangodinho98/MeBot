@@ -37,7 +37,16 @@
     dotnet add package Newtonsoft.Json
     ```
 
-3. **Prepare Context**:
+3. **Prepare Secrets**:
+    Create a `secrets.json` file with the following structure:
+    ```json
+    {
+        "HuggingFaceApiKey": "your_api_key_here"
+    }
+    ```
+    - Add `secrets.json` to your `.gitignore` file to prevent it from being committed.
+
+4. **Prepare Context**:
     Create a `context.json` file with the following structure:
     ```json
     {
@@ -52,9 +61,6 @@
         ]
     }
     ```
-
-4. **Set Up Hugging Face API Key**:
-    Replace the `ApiKey` constant in the `Program.cs` file with your Hugging Face API key.
 
 5. **Run the Application**:
     ```bash
